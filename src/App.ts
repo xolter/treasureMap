@@ -1,18 +1,17 @@
 import { GameController } from "./controllers/Game.controller";
-import { Parser } from "./services/Parser.service";
+import { Parser, ITile, ITreasure, IAdventurer } from "./services/Parser.service";
+import { join } from 'path';
 
-if (process.argv.length < 3) {
-    console.log("Please run: node ./src/App.js {filePath}");
+if (process.argv.length < 4) {
+    console.log("Please run: node ./src/App.js {filePath} {fileDestinationPath}");
 } else {
     const filePath: string = process.argv[2];
-    Parser.readFile(filePath).then(content => {
-        let gameController = new GameController(Parser.parseFile(content));
+    const destFilePath: string = process.argv[3];
+    Parser.readFile(join(__dirname, filePath)).then(content => {
+        console.log(content)
+        let parsed: (ITile | ITreasure | IAdventurer)[] = Parser.parseFile(content);
+        let gameController = new GameController(parsed);
+        console.log(parsed);
+        Parser.writeFile(destFilePath, gameController.play());
     });
-    //create objects
-
-    //launch the game
-
-    //create the final file
-    
-    console.log(filePath);
 }

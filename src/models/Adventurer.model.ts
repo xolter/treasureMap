@@ -6,7 +6,7 @@ export class Adventurer {
     private _name: string;
     x: number;
     y: number;
-    private _treasorCount: number;
+    private _treasureCount: number;
     private _direction: Direction;
     private _moves: Move[];
 
@@ -14,7 +14,7 @@ export class Adventurer {
         this._name = name;
         this.x = x;
         this.y = y;
-        this._treasorCount = 0;
+        this._treasureCount = 0;
         this._direction = this.initDirection(direction);
         this._moves = this.initMoves(moves);
     }
@@ -85,12 +85,16 @@ export class Adventurer {
         this._direction = direction;
     }
 
-    get treasorCount() {
-        return this._treasorCount;
+    get treasureCount() {
+        return this._treasureCount;
     }
 
-    public addTreasor() {
-        this._treasorCount++;
+    get name() {
+        return this._name;
+    }
+
+    public addTreasure() {
+        this._treasureCount++;
     }
 
     public hasMove(round: number): boolean {

@@ -1,14 +1,18 @@
 import {Game} from "../models/Game.model"
-import { ITile, ITreasure, IAdventurer,
-    IEndAdventurer, isIAdventurer, isITreasure } from "../services/Parser.service";
+import { ITile, ITreasure, IAdventurer, isIAdventurer, isITreasure } from "../services/Parser.service";
 
 export class GameController {
 
     private _game: Game;
 
-    constructor(instructions: [(ITile | ITreasure | IAdventurer)[], [number, number]]) {
-        this._game = new Game(instructions[1][0], instructions[1][1]);
-        this.initGame(instructions[0]);
+    constructor(instructions: (ITile | ITreasure | IAdventurer)[]) {
+        if (instructions.length < 1)
+            this._game = new Game(0, 0);
+        else {
+            let map: ITile = instructions[0] as ITile;
+            this._game = new Game(map.x, map.y);
+        }
+        this.initGame(instructions);
     }
 
     private initGame(instructions: (ITile | ITreasure | IAdventurer)[]) {
@@ -24,15 +28,12 @@ export class GameController {
         }
     }
 
-    public play() {
-        let turn = 0;
+    public play(): string {
+        /*let turn = 0;
         let isGameRunning = this._game.playersHaveMoves();
         do {
             
-        } while (isGameRunning)
-    }
-
-    get gameToInstructions(): (ITile | ITreasure | IEndAdventurer)[] {
-        return [];
+        } while (isGameRunning)*/
+        return this._game.gameToString();
     }
 }

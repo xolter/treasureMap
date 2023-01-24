@@ -1,5 +1,4 @@
 import { promises as fsPromises } from 'fs';
-import { join } from 'path';
 
 export interface ITile {
   isMontain: boolean;
@@ -17,12 +16,6 @@ export interface IAdventurer extends ITile {
   moves: string;
 }
 
-export interface IEndAdventurer extends ITile {
-  name: string;
-  direction: string;
-  treasureCount: number;
-}
-
 export function isITreasure(tile: any): tile is ITreasure {
   return 'treasureCount' in tile;
 }
@@ -35,12 +28,12 @@ export class Parser {
   static async readFile(filename: string) {
     try {
       const result = await fsPromises.readFile(
-        join(__dirname, filename),
+        filename,
         'utf-8',
       );
       return result;
     } catch (err) {
-      return '';
+      return String(err);
     }
   }
 
@@ -82,10 +75,9 @@ export class Parser {
     return !isNaN(Number(instruction[2])) && !isNaN(Number(instruction[3]));  
   }
 
-  static parseFile(fileContent: string): [(ITile | ITreasure | IAdventurer)[], [number, number]] {
+  static parseFile(fileContent: string): (ITile | ITreasure | IAdventurer)[] {
     let lines = fileContent.split(/\r?\n/);
     let instructions: (ITile | ITreasure | IAdventurer)[] = [];
-    let mapSize: [number, number] = [1, 1];
     for (let i = 0; i < lines.length; i++) {
       let instruction = lines[i].split(" - ");
       if (instruction.length < 3) {
@@ -94,12 +86,16 @@ export class Parser {
       switch (instruction[0]) {
         case "C":
           if (this.isValidTileInstruction(instruction))
-            mapSize = [Number(instruction[1]), Number(instruction[2])];
+            instructions.unshift({
+              isMontain: false,
+              x: Number(instruction[1]),
+              y: Number(instruction[2])
+          });
           break;
         case "M":
           if (this.isValidTileInstruction(instruction))
             instructions.push({
-              isMontain: instruction[0] === "M",
+              isMontain: true,
               x: Number(instruction[1]),
               y: Number(instruction[2])
           });
@@ -128,10 +124,12 @@ export class Parser {
           break;
       }
     }
-    return [instructions, mapSize];
+    return instructions;
   }
 
-  static gameToString(instructions: (ITile | ITreasure | IEndAdventurer)[]): string {
-    return "";
+  static test2(): (ITile | ITreasure | IAdventurer)[] {
+    let res: (ITile | ITreasure | IAdventurer)[] = [];
+    res.push({isMontain: false, name: "Lara", x: Number("1"), y: Number("1"), direction: "S", moves: "AADADAGGA"});
+    return res;
   }
 }

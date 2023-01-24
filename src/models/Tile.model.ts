@@ -19,7 +19,7 @@ export class Tile {
         return this._isAccessible;
     }
 
-    set isAccessible(isAccessible: boolean) {
-        this.isAccessible = isAccessible;
+    set isAccessible(accessible: boolean) {
+        this._isAccessible = accessible;
     }
 }
