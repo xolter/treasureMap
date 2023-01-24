@@ -46,4 +46,22 @@ describe('Test Adventurer moves', function() {
             assert.deepEqual(adventurer['changeDirection']("D"), "N" as Direction);
         });
     })
+    describe('#goForward()', function() {
+        it('1 step to the south', function() {
+            adventurer.direction = "S";
+            assert.deepEqual(adventurer['goForward'](), [0, 1]);
+        });
+        it('1 step to the north', function() {
+            adventurer.direction = "N";
+            assert.deepEqual(adventurer['goForward'](), [0, -1]);
+        });
+        it('1 step to the west', function() {
+            adventurer.direction = "O";
+            assert.deepEqual(adventurer['goForward'](), [-1, 0]);
+        });
+        it('1 step to the East', function() {
+            adventurer.direction = "E";
+            assert.deepEqual(adventurer['goForward'](), [1, 0]);
+        });
+    })
 });

@@ -1,4 +1,6 @@
+import { Adventurer } from "../models/Adventurer.model";
 import {Game} from "../models/Game.model"
+
 import { ITile, ITreasure, IAdventurer, isIAdventurer, isITreasure } from "../services/Parser.service";
 
 export class GameController {
@@ -21,7 +23,7 @@ export class GameController {
             if (isIAdventurer(curr)) {
                 this._game.setAdventurer(curr.name, curr.x, curr.y, curr.direction, curr.moves);
             } else if (isITreasure(curr)) {
-                this._game.setTreasor(curr.x, curr.y, curr.treasureCount);
+                this._game.setTreasure(curr.x, curr.y, curr.treasureCount);
             } else if (curr.isMontain) {
                 this._game.setMontain(curr.x, curr.y);
             }
@@ -29,11 +31,26 @@ export class GameController {
     }
 
     public play(): string {
-        /*let turn = 0;
         let isGameRunning = this._game.playersHaveMoves();
+        if (this._game.adventurers.length < 1 || !isGameRunning)
+            return this._game.gameToString();
+        let currAdventurer: Adventurer;
+        let nextX: number;
+        let nextY: number;
         do {
-            
-        } while (isGameRunning)*/
+            for (let i = 0; i < this._game.adventurers.length; i++) {
+                currAdventurer = this._game.adventurers[i];
+                [nextX, nextY] = currAdventurer.move(this._game.round);
+                if (!this._game.isLegalMove(nextX, nextY))
+                    continue;
+                if (this._game.isTreasure(nextX, nextY))
+                    currAdventurer.addTreasure();
+                currAdventurer.x = nextX;
+                currAdventurer.y = nextY;   
+            }
+            this._game.addRound();
+            isGameRunning = this._game.playersHaveMoves();
+        } while (isGameRunning)
         return this._game.gameToString();
     }
 }

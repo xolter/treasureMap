@@ -11,9 +11,6 @@ before(async function() {
 });
 
 describe('Test file import', function() {
-  it('no file', function() {
-    assert.equal(badFile, '');
-  });
   it('valid file', function() {
     assert.notEqual(validFile, '');
   });

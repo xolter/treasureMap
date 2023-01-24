@@ -4,16 +4,16 @@ export type Move = "A" | "G" | "D";
 export class Adventurer {
     
     private _name: string;
-    x: number;
-    y: number;
+    private _x: number;
+    private _y: number;
     private _treasureCount: number;
     private _direction: Direction;
     private _moves: Move[];
 
     constructor(name: string, x: number, y: number, direction: string, moves: string) {
         this._name = name;
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
         this._treasureCount = 0;
         this._direction = this.initDirection(direction);
         this._moves = this.initMoves(moves);
@@ -61,11 +61,23 @@ export class Adventurer {
         }
     }
 
-    private goForward() {}
+    private goForward(): [number, number] {
+        switch (this._direction) {
+            case "N":
+                return [this._x, this._y - 1];
+            case "S":
+                return [this._x, this._y + 1];
+            case "O":
+                return [this._x - 1, this._y];
+            case "E":
+                return [this._x + 1, this._y];
+        }
 
-    public move(round: number): void {
+    }
+
+    public move(round: number): [number, number] {
         if (round < 0 || round >= this._moves.length)
-            return;
+            return [-1, -1];
         let move = this._moves[round];
         switch (move) {
             case "G":
@@ -75,7 +87,7 @@ export class Adventurer {
             default:
                 break;
         }
-        this.goForward();
+        return this.goForward();
     }
 
     get direction() {
@@ -98,6 +110,11 @@ export class Adventurer {
     }
 
     public hasMove(round: number): boolean {
-        return round > 0 && round < this._moves.length;
+        return round >= 0 && round < this._moves.length;
     }
+
+    get x() { return this._x; }
+    set x(x: number) { this._x = x; }
+    get y() { return this._y; }
+    set y(y: number) { this._y = y; }
 }

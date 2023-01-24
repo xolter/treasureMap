@@ -17,12 +17,11 @@ export class Treasure extends Tile {
         this._counter = counter;
     }
 
-    public retrieveTreasure(): number {
+    public retrieveTreasure(): boolean {
         if (this._counter > 0) {
             this._counter--;
-            return 1;
-        } else {
-            return 0;
+            return true;
         }
+        return false;
     }
 }

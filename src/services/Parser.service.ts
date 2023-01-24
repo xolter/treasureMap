@@ -126,10 +126,4 @@ export class Parser {
     }
     return instructions;
   }
-
-  static test2(): (ITile | ITreasure | IAdventurer)[] {
-    let res: (ITile | ITreasure | IAdventurer)[] = [];
-    res.push({isMontain: false, name: "Lara", x: Number("1"), y: Number("1"), direction: "S", moves: "AADADAGGA"});
-    return res;
-  }
 }
