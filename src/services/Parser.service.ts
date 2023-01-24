@@ -8,13 +8,27 @@ export interface ITile {
 }
 
 export interface ITreasure extends ITile {
-  treasorCount: number;
+  treasureCount: number;
 }
 
 export interface IAdventurer extends ITile {
   name: string;
   direction: string;
   moves: string;
+}
+
+export interface IEndAdventurer extends ITile {
+  name: string;
+  direction: string;
+  treasureCount: number;
+}
+
+export function isITreasure(tile: any): tile is ITreasure {
+  return 'treasureCount' in tile;
+}
+
+export function isIAdventurer(tile: any): tile is IAdventurer {
+  return 'name' in tile;
 }
 
 export class Parser {
@@ -27,6 +41,17 @@ export class Parser {
       return result;
     } catch (err) {
       return '';
+    }
+  }
+
+  static async writeFile(filePath: string, content: string) {
+    try {
+      await fsPromises.writeFile(filePath, content);
+      return 0;
+    }
+    catch (err) {
+      console.log(err);
+      return 1;
     }
   }
 
@@ -57,9 +82,10 @@ export class Parser {
     return !isNaN(Number(instruction[2])) && !isNaN(Number(instruction[3]));  
   }
 
-  static parseFile(fileContent: string): (ITile | ITreasure | IAdventurer)[] {
+  static parseFile(fileContent: string): [(ITile | ITreasure | IAdventurer)[], [number, number]] {
     let lines = fileContent.split(/\r?\n/);
     let instructions: (ITile | ITreasure | IAdventurer)[] = [];
+    let mapSize: [number, number] = [1, 1];
     for (let i = 0; i < lines.length; i++) {
       let instruction = lines[i].split(" - ");
       if (instruction.length < 3) {
@@ -67,6 +93,9 @@ export class Parser {
       }
       switch (instruction[0]) {
         case "C":
+          if (this.isValidTileInstruction(instruction))
+            mapSize = [Number(instruction[1]), Number(instruction[2])];
+          break;
         case "M":
           if (this.isValidTileInstruction(instruction))
             instructions.push({
@@ -81,7 +110,7 @@ export class Parser {
               isMontain: false,
               x: Number(instruction[1]),
               y: Number(instruction[2]),
-              treasorCount: Number(instruction[3])
+              treasureCount: Number(instruction[3])
             });
           break;
         case "A":
@@ -99,6 +128,10 @@ export class Parser {
           break;
       }
     }
-    return instructions;
+    return [instructions, mapSize];
+  }
+
+  static gameToString(instructions: (ITile | ITreasure | IEndAdventurer)[]): string {
+    return "";
   }
 }

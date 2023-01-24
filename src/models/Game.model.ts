@@ -1,16 +1,10 @@
 import { Adventurer } from "./Adventurer.model";
 import { FieldType, Tile } from "./Tile.model";
+import { Treasure } from "./Treasure.model";
 
 enum Status {
     running = "running",
     over = "over"
-}
-
-export interface TileSpec {
-    x: number,
-    y: number,
-    fieldType: FieldType,
-    treasorCount?: number
 }
 
 export class Game {
@@ -62,5 +56,28 @@ export class Game {
 
     get adventurers() {
         return this._adventurers;
+    }
+
+    public setMontain(x: number, y: number) {
+        this._map[x][y].isAccessible = false;
+    }
+    public setTreasor(x: number, y: number, treasureCount: number) {
+        this._map[x][y] = new Treasure(x, y, FieldType.treasure, treasureCount);
+    }
+
+    public setAdventurer(name: string, x: number, y: number, direction: string, moves: string) {
+        let adventurer = new Adventurer(name, x, y, direction, moves);
+        this._adventurers.push(adventurer);
+    }
+
+    public playersHaveMoves(): boolean {
+        let i = 0;
+        let canMove = true;
+        while (i < this._adventurers.length && canMove) {
+            if (this._adventurers[i].hasMove(this._round))
+                canMove = false;
+            i++;
+        }
+        return canMove;
     }
 }

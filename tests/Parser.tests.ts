@@ -48,30 +48,30 @@ describe('Test check instruction', function() {
 
 describe('Test ParseFile', function() {
   it('only C', function() {
-    let expected: ITile[] = [{isMontain: false, x: 3, y: 4}];
-    assert.deepEqual(Parser.parseFile("C - 3 - 4"), expected);
+    let expected: ITile[] = [];
+    assert.deepEqual(Parser.parseFile("C - 3 - 4"), [expected, [3, 4]]);
   });
   it('C and M', function() {
     let test = Parser.parseFile("C - 3 - 4\nM - 2 - 1");
-    let expected: ITile[] = [{isMontain: false, x: 3, y: 4}, {isMontain: true, x: 2, y: 1}];
-    assert.deepEqual(test, expected);
+    let expected: ITile[] = [{isMontain: true, x: 2, y: 1}];
+    assert.deepEqual(test, [expected, [3, 4]]);
   });
   it('C and M with # line', function() {
-    let test = Parser.parseFile("C - 3 - 4\n#Should be ignored\nM - 2 - 1");
-    let expected: ITile[] = [{isMontain: false, x: 3, y: 4}, {isMontain: true, x: 2, y: 1}];
-    assert.deepEqual(test, expected);
+    let test = Parser.parseFile("C - 8 - 8\n#Should be ignored\nM - 2 - 1");
+    let expected: ITile[] = [{isMontain: true, x: 2, y: 1}];
+    assert.deepEqual(test, [expected, [8, 8]]);
   });
   it('C and M with random lines', function() {
-    let test = Parser.parseFile("C - 3 - 4\nthq^çdfv4\nM - 2 - 1\n\t  - -\nT  -1 - 1 - 2");
-    let expected: ITile[] = [{isMontain: false, x: 3, y: 4}, {isMontain: true, x: 2, y: 1}];
-    assert.deepEqual(test, expected);
+    let test = Parser.parseFile("C - 9 - 10\nthq^çdfv4\nM - 2 - 1\n\t  - -\nT  -1 - 1 - 2");
+    let expected: ITile[] = [{isMontain: true, x: 2, y: 1}];
+    assert.deepEqual(test, [expected, [9, 10]]);
   });
   it('C, M, T and A', function() {
     let test = Parser.parseFile("C - 3 - 4\nM - 2 - 1\nT - 0 - 3 - 2\nT - 1 - 3 - 3\nA - Lara - 1 - 1 - S - AADADAGGA");
     let expected: (ITile | ITreasure | IAdventurer)[] = [
-      {isMontain: false, x: 3, y: 4}, {isMontain: true, x: 2, y: 1}, {isMontain: false, x: 0, y: 3, treasorCount: 2},
-      {isMontain: false, x: 1, y: 3, treasorCount: 3}, {isMontain: false, name: "Lara", x: 1, y: 1, direction: "S", moves: "AADADAGGA"}
+      {isMontain: true, x: 2, y: 1}, {isMontain: false, x: 0, y: 3, treasureCount: 2},
+      {isMontain: false, x: 1, y: 3, treasureCount: 3}, {isMontain: false, name: "Lara", x: 1, y: 1, direction: "S", moves: "AADADAGGA"}
     ];
-    assert.deepEqual(test, expected);
+    assert.deepEqual(test, [expected, [3, 4]]);
   });
 });

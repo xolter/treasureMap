@@ -13,7 +13,11 @@ export class Treasure extends Tile {
         return this._counter;
     }
 
-    public retrieveTreasor(): number {
+    set counter(counter: number) {
+        this._counter = counter;
+    }
+
+    public retrieveTreasure(): number {
         if (this._counter > 0) {
             this._counter--;
             return 1;

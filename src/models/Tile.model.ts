@@ -1,7 +1,7 @@
 export enum FieldType {
     plain = "plain",
     montain = "montain",
-    treasor = "treasor"
+    treasure = "treasure"
 }
 
 export class Tile {

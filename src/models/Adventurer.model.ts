@@ -10,7 +10,7 @@ export class Adventurer {
     private _direction: Direction;
     private _moves: Move[];
 
-    constructor(name: string, x: number, y: number, direction: Direction, moves: string) {
+    constructor(name: string, x: number, y: number, direction: string, moves: string) {
         this._name = name;
         this.x = x;
         this.y = y;
@@ -91,5 +91,9 @@ export class Adventurer {
 
     public addTreasor() {
         this._treasorCount++;
+    }
+
+    public hasMove(round: number): boolean {
+        return round > 0 && round < this._moves.length;
     }
 }
