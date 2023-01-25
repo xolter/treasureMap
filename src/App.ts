@@ -8,10 +8,8 @@ if (process.argv.length < 4) {
     const filePath: string = process.argv[2];
     const destFilePath: string = process.argv[3];
     Parser.readFile(join(__dirname, filePath)).then(content => {
-        console.log(content)
         let parsed: (ITile | ITreasure | IAdventurer)[] = Parser.parseFile(content);
         let gameController = new GameController(parsed);
-        console.log(parsed);
         Parser.writeFile(destFilePath, gameController.play());
     });
 }

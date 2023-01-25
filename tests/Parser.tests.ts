@@ -2,12 +2,10 @@ import {assert} from "chai";
 import {Parser} from "../src/services/Parser.service";
 import { ITile, ITreasure, IAdventurer } from "../src/services/Parser.service";
 
-let badFile: string;
 let validFile: string;
 
 before(async function() {
-    badFile = await Parser.readFile('');
-    validFile = await Parser.readFile('../../tests/assets/testFile1');
+  validFile = await Parser.readFile('../../tests/assets/testFile');
 });
 
 describe('Test file import', function() {
